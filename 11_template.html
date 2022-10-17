@@ -7,17 +7,17 @@
   <style>
 		button{padding: 0.4em; border-radius: 5px; font-family: monospace; margin: 0.5em 0; font-size: 1.4em; width: 350px; height: 100px; transition-duration: 0.2s ;}
 
-    .redbutton{background-color: red; color: black; }
-    .redbutton:hover{background-color: rgba(255, 0, 0, 0.600);color: white; }
+    .redbutton{background-color: red; color: black;}
+    .redbutton:hover{background-color: rgba(255, 0, 0, 0.600) }
 
     .greenbutton{background-color: green; color: black;}
-    .greenbutton:hover{background-color: rgba(0, 128, 0, 0.600); color:white }
+    .greenbutton:hover{background-color: rgba(0, 128, 0, 0.600) }
 
-    .bluebutton{background-color: blue; color:black }
-    .bluebutton:hover{background-color: rgba(0, 0, 255, 0.600); color:white }
+    .bluebutton{background-color: blue; color: black; }
+    .bluebutton:hover{background-color: rgba(0, 0, 255, 0.600) }
 
     .purplebutton{background-color: purple; color: black; }
-    .purplebutton:hover{background-color: rgba(128, 0, 128, 0.600); color: white; }
+    .purplebutton:hover{background-color: rgba(128, 0, 128, 0.600) }
 
 
     
@@ -27,15 +27,42 @@
 </head>
 <body>
   <h1>Quiz</h1>
-    <h2>Question</h2>
-      <div>
-        <button>a</button>
-        <button>b</button>
-        <button>c</button>
-        <button>d</button>
+    <div class="question"></div>
+    <div class="title"></div>
+
+<script>
+  async function getQuestions() {
+  const response = await fetch("https://gymburgdorf.github.io/webdev/json/quiz.json")
+      const data = await response.json()
+      const randomIndex = Math.floor(data.length * Math.random())
+      const question = data[randomIndex]
+      renderQuestion(question)
+    }
+
+    function renderQuestion(question) {
+      const qdiv = document.querySelector(".question")
+      console.log(question)
+      qdiv.innerHTML = `
+      <div class="title">${question.title}</div>
+      <div> 
+        <button>🐵 <span class="redbutton">${question.a}</span></button>
+        <button>🦁 <span class="greenbutton">${question.b}</span></button>
+        <button>🦎 <span class="bluebutton">${question.c}</span></button>
+        <button>🐔 <span class="purplebutton">${question.d}</span></button>
+      </div>
+      `
+    }
+
+getQuestions()
+
 
     
-      </div>
+
+
+
+
+</script>
+
 
 </body>
 </html>
