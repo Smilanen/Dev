@@ -45,12 +45,14 @@
       qdiv.innerHTML = `
       <div class="title">${question.title}</div>
       <div> 
-        <button>🐵 <span class="redbutton">${question.a}</span></button>
-        <button>🦁 <span class="greenbutton">${question.b}</span></button>
-        <button>🦎 <span class="bluebutton">${question.c}</span></button>
-        <button>🐔 <span class="purplebutton">${question.d}</span></button>
+       <button class= "redbutton">🐵 <span class="redbutton">${question.a}</span></button> 
+       <button class="greenbutton">🦁 <span class="greenbutton">${question.b}</span></button> 
+       ${question.c != "" ? `<button class="bluebutton">🦎 <span class="bluebutton">${question.c}</span></button>` : ""}
+       ${question.c != "" ? `<button class="purplebutton">🐔 <span class="purplebutton">${question.d}</span></button>` : ""}
       </div>
       `
+
+
     }
 
 getQuestions()
