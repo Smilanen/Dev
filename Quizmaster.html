@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quizmaster</title>
+  <script src="https://websocket.hidora.com/WebsocketClient.js"></script>
+  <script src="renderQuestion.js"></script>
+  <link rel="stylesheet" href="https://gymburgdorf.github.io/helpers/basicstyle.css"></link>
+  <style>
+		button{padding: 0.4em; border-radius: 5px; font-family: monospace; margin: 0.5em 0; font-size: 1.4em; width: 350px; height: 100px; transition-duration: 0.2s ;}
+
+    .redbutton{background-color: red; color: black;}
+    .redbutton:hover{background-color: rgba(255, 0, 0, 0.600) }
+
+    .greenbutton{background-color: green; color: black;}
+    .greenbutton:hover{background-color: rgba(0, 128, 0, 0.600) }
+
+    .bluebutton{background-color: blue; color: black; }
+    .bluebutton:hover{background-color: rgba(0, 0, 255, 0.600) }
+
+    .purplebutton{background-color: purple; color: black; }
+    .purplebutton:hover{background-color: rgba(128, 0, 128, 0.600) }
+
+
+    
+    
+		
+	</style>
+</head>
+<body>
+  <h1>Quiz</h1>
+    <div class="question"></div>
+    <div class="title"></div>
+
+    <button class="sendQuestion">Send Question</button>
+<div class="log"></div>
+<div class="userlist"></div>
+
+<script type="module">
+  async function getQuestions() {
+    const response = await fetch("quiz.json")
+    const data = await response.json()
+    return data
+  }
+
+  const allQuestions = await getQuestions()
+
+  function getRandomQuestion() {
+    const randomIndex = Math.floor(allQuestions.length * Math.random())
+    const question = allQuestions[randomIndex]
+    renderQuestion(question)
+    return question
+  }
+    
+  const ws = await WS.connect("testquiz", "👑")
+  log(`I connected as ${ws.username}!`);
+  ws.onMessage((msg) => log(JSON.stringify(msg)));
+  ws.onUserStatus(showUsers);
+  ws.getUsers();
+
+  function showUsers(userlist) {
+    document.querySelector('.userlist').innerHTML = userlist
+      .map((u) => `<span>${u}</span>`)
+      .join('');
+  }
+
+  function log(m) {
+    const l = document.querySelector('.log');
+    l.insertAdjacentHTML('beforeEnd', `<div>${m}</div>`);
+  }
+
+  document.querySelector('.sendQuestion').addEventListener('click', () => {
+    const question = getRandomQuestion()
+    const {answer, ...questionWithoutAnswer} = question
+    ws.sendToAll(questionWithoutAnswer);
+  });
+
+
+
+</script>
+
+</body>
+</html>
